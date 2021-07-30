@@ -75,18 +75,15 @@ void RoutePlanner::AStarSearch() {
     current_node = start_node;
     open_list.emplace_back(current_node);
     current_node->visited = true;
+    bool current_node_is_end_node = false;
 
-    // iterate while there are still open nodes...
-    while(open_list.size() > 0) {
-        // ... until we reach the end, then construct final path
-        if(current_node->x == end_node->x && current_node->y == end_node->y) {
-            m_Model.path = ConstructFinalPath(current_node);
-            break;
-        } else {
-            // if not at the end, expand neighbours and move to next node
-            AddNeighbors(current_node);
-            current_node = NextNode();
-        }
+    // iterate while there are still open nodes, and we're not at the end node
+    while(open_list.size() > 0 && !current_node_is_end_node) {
+        AddNeighbors(current_node);
+        current_node = NextNode();
+        current_node_is_end_node = current_node->x == end_node->x && current_node->y == end_node->y;  
     }
-
+    
+    // construct final path once we've reached the end_node
+    m_Model.path = ConstructFinalPath(current_node);
 }
