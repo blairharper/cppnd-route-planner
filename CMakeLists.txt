@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.11.3)
 
+if(APPLE)
+   include_directories(AFTER "/opt/X11/include")
+endif()
+
+
 # Set the C++ standard we will use
 set(CMAKE_CXX_STANDARD 17)
 
